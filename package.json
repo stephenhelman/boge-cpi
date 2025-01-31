@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "convertapi-js": "~1.1",
+    "date-fns": "^4.1.0",
+    "pdf-parse": "^1.1.1",
+    "pdf2json": "^3.1.5"
+  }
+}
