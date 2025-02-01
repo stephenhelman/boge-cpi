@@ -3,7 +3,9 @@ const pdf = require("pdf-parse");
 const fns = require("date-fns");
 const { differenceInMonths } = fns;
 
-let dataBuffer = fs.readFileSync("./Stephen.pdf");
+let dataBuffer = fs.readFileSync(
+  "/Users/stephenhelman/Desktop/Richard Taylor/Edwin Jambo/Stephen - TU.pdf"
+);
 
 pdf(dataBuffer).then(function (data) {
   // PDF text
@@ -14,6 +16,7 @@ pdf(dataBuffer).then(function (data) {
       newArray.push(text[i]);
     }
   }
+  console.log(newArray);
   //client info
   const client = {
     "Fico Score": "",
@@ -37,6 +40,7 @@ pdf(dataBuffer).then(function (data) {
   const accountsFinal = [];
   const inquiriesRaw = [];
   const inquiriesFinal = [];
+
   for (i = 0; i <= newArray.length; i++) {
     //Getting fico score count = 0
     if (
@@ -49,6 +53,7 @@ pdf(dataBuffer).then(function (data) {
       client["Fico Score"] = score;
       count++;
     }
+
     //Getting number of accounts count = 1
     if (
       (newArray[i] === "Open" && newArray[i + 2] === "Self") ||
@@ -58,6 +63,7 @@ pdf(dataBuffer).then(function (data) {
       client["Open accounts"] = accounts;
       count++;
     }
+
     //Getting utilization $$ count = 2
     if (newArray[i] === "Credit" && newArray[i + 1] === "used" && count === 2) {
       let utilization = "";
@@ -71,6 +77,7 @@ pdf(dataBuffer).then(function (data) {
       client["Credit used"] = utilization;
       count++;
     }
+
     //Getting total credit card limits count = 3
     if (
       newArray[i] === "Credit" &&
@@ -92,6 +99,7 @@ pdf(dataBuffer).then(function (data) {
       client["Utilization %"] = `${utilization}%`;
       count++;
     }
+
     //Getting average credit age count = 4
     //TODO - Fix for no months
     if (newArray[i] === "Average" && newArray[i + 2] === "age" && count === 4) {
@@ -116,6 +124,7 @@ pdf(dataBuffer).then(function (data) {
         count++;
       }
     }
+
     //Format account information count = 6
     if (count === 6) {
       accountsRaw.forEach((account) => {
@@ -140,6 +149,7 @@ pdf(dataBuffer).then(function (data) {
               .replace("name", "");
             accountObj["Account Name"] = name;
           }
+
           //getting opening date
           if (cell.includes("opened")) {
             const endOfOpenedIndex = account.indexOf("Open", index);
@@ -151,6 +161,7 @@ pdf(dataBuffer).then(function (data) {
             const fullOpened = `${openedDate}, ${openedYear}`;
             accountObj["Date Opened"] = fullOpened;
           }
+
           //getting account type
           //TODO - Fix for TU and EQ (revolving account, open account)
           if (cell.includes("type")) {
@@ -161,6 +172,7 @@ pdf(dataBuffer).then(function (data) {
               .replace("type", "");
             accountObj["Account Type"] = type;
           }
+
           //getting account status
           if (cell.includes("Status") && cell.length > 6) {
             const endOfStatusIndex = account.indexOf("Balance", index);
@@ -331,5 +343,5 @@ pdf(dataBuffer).then(function (data) {
       count++;
     }
   }
-  console.log(client);
+  console.log(accountsRaw);
 });
