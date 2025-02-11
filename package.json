@@ -1,8 +1,23 @@
 {
+  "name": "url-redirect",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server/server.js",
+    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "start": "NODE_ENV=production node server/server.js"
+  },
   "dependencies": {
     "convertapi-js": "~1.1",
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "express": "^4.21.2",
+    "express-async-handler": "^1.2.0",
+    "multer": "^1.4.5-lts.1",
     "pdf-parse": "^1.1.1",
     "pdf2json": "^3.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
