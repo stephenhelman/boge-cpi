@@ -27,7 +27,7 @@ const FileUpload = ({ setClient, showModal, setShowModal, setBureau }) => {
     const formData = new FormData();
 
     const config = { headers: { "Content-Type": "multipart/form-data" } };
-    let postUrl = "http://localhost:3500/api";
+    let postUrl = "https://boge-cpi.onrender.com/api";
     //determine which options are selected
     if (experian.name && !transUnion.name && !equifax.name) {
       formData.append("Experian", experian);
