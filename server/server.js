@@ -19,7 +19,7 @@ app.use("/api", require("./routes/pdfRouter.js"));
 if (process.env.NODE_ENV === "production") {
   console.log(__dirname);
   app.use("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "..", "client", "dist", "index.html"));
   });
 }
 
