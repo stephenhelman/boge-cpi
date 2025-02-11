@@ -3,10 +3,10 @@ const pdf = require("pdf-parse");
 
 const { parseRawReportData, assignClientInfo } = require("./helpers");
 
-let dataBuffer = fs.readFileSync(
+/* let dataBuffer = fs.readFileSync(
   "/Users/stephenhelman/Desktop/Richard Taylor/Edwin Jambo/Stephen - TU.pdf"
 );
-
+ */
 const client = {
   "Credit Bureau": "Experian",
   "Credit Score": "",
