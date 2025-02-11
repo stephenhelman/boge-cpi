@@ -3,9 +3,9 @@ const PDF = require("pdf-parse");
 const fns = require("date-fns");
 const { differenceInDays } = fns;
 
-let dataBuffer = fs.readFileSync(
+/* let dataBuffer = fs.readFileSync(
   "/Users/stephenhelman/Desktop/Richard Taylor/Edwin Jambo/Stephen - TU.pdf"
-);
+); */
 
 const formatData = (data, bureau) => {
   // PDF text
