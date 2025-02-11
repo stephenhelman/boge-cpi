@@ -17,9 +17,8 @@ app.use(express.json());
 app.use("/api", require("./routes/pdfRouter.js"));
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/client/dist")));
   app.use("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+    res.sendFile(path.join("client", "dist", "index.html"));
   });
 }
 
