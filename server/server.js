@@ -14,7 +14,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-app.use("/", require("./routes/pdfRouter.js"));
+app.use("/api", require("./routes/pdfRouter.js"));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

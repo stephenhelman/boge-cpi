@@ -34,7 +34,7 @@ const ReportsTable = ({ client, setClient, setShowModal }) => {
       </tr>
       <tr>
         <th className="reportsHeader">Payment History</th>
-        <td className="reportsCell">TODO</td>
+        <td className="reportsCell"></td>
       </tr>
       <tr>
         <th className="reportsHeader">Total Utilization</th>
@@ -62,7 +62,7 @@ const ReportsTable = ({ client, setClient, setShowModal }) => {
       </tr>
       <tr>
         <th className="reportsHeader">Derogatory Marks</th>
-        <td className="reportsCell">TODO</td>
+        <td className="reportsCell"></td>
       </tr>
       <tr>
         <th className="reportsHeader">Total Accounts</th>

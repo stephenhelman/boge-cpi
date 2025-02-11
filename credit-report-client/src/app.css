@@ -149,6 +149,7 @@
 .reportsCell {
   border: 1px solid black;
   padding: 10px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .reportsHeader {

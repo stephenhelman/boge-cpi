@@ -29,7 +29,7 @@ const AccountsTable = ({ client, bureau, setBureau }) => {
           <tr key={index}>
             <td className="accountsRow">{account["Account Name"]}</td>
             <td className="accountsRow">{account["Account Type"]}</td>
-            <td className="accountsRow">TODO</td>
+            <td className="accountsRow"></td>
             <td className="accountsRow">{account["Reporting Date"]}</td>
             <td className="accountsRow">${account["Account Limit"]}</td>
             <td className="accountsRow">${account["Current Balance"]}</td>
@@ -50,7 +50,7 @@ const AccountsTable = ({ client, bureau, setBureau }) => {
           <tr key={index}>
             <td className="accountsRow">{account["Account Name"]}</td>
             <td className="accountsRow">{account["Account Type"]}</td>
-            <td className="accountsRow">TODO</td>
+            <td className="accountsRow"></td>
             <td className="accountsRow">{account["Reporting Date"]}</td>
             <td className="accountsRow">${account["Account Limit"]}</td>
             <td className="accountsRow">${account["Current Balance"]}</td>
@@ -71,7 +71,7 @@ const AccountsTable = ({ client, bureau, setBureau }) => {
           <tr key={index}>
             <td className="accountsRow">{account["Account Name"]}</td>
             <td className="accountsRow">{account["Account Type"]}</td>
-            <td className="accountsRow">TODO</td>
+            <td className="accountsRow"></td>
             <td className="accountsRow">{account["Reporting Date"]}</td>
             <td className="accountsRow">${account["Account Limit"]}</td>
             <td className="accountsRow">${account["Current Balance"]}</td>
