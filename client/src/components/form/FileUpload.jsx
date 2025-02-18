@@ -89,6 +89,8 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
     }
     const bureau = Object.keys(client)[0];
     setIsLoading(true);
+    setShowModal(false);
+    setShowForm(false);
     setTimeout(() => {
       dispatch(
         setLogistics({
@@ -97,8 +99,6 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
         })
       );
 
-      setShowModal(false);
-      setShowForm(false);
       setIsLoading(false);
     }, 2500);
   };

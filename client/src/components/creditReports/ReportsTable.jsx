@@ -1,6 +1,7 @@
 import { areThereDerogatoryMarks } from "../../util/accountHelpers";
 import { selectCurrentClient, reset } from "../../clientSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { analyzeLatePayments, compareLates } from "../../util/universalHelpers";
 
 const ReportsTable = ({ setShowModal }) => {
   const client = useSelector(selectCurrentClient);
@@ -8,6 +9,9 @@ const ReportsTable = ({ setShowModal }) => {
   const experian = client?.experian ? client.experian : null;
   const transUnion = client?.transUnion ? client.transUnion : null;
   const equifax = client?.equifax ? client.equifax : null;
+
+  const latePayments = analyzeLatePayments(client);
+  const mostRecentLate = compareLates(latePayments)[0];
 
   const experianHeader = experian ? (
     <td className="reportsHeaderTop">Experian</td>
@@ -36,8 +40,10 @@ const ReportsTable = ({ setShowModal }) => {
         ) : null}
       </tr>
       <tr>
-        <th className="reportsHeader">Payment History</th>
-        <td className="reportsCell"></td>
+        <th className="reportsHeader">Most Recent Late Payment</th>
+        <td className="reportsCell latePayment" colSpan="3">
+          {mostRecentLate ? mostRecentLate : "No Late Payments"}
+        </td>
       </tr>
       <tr>
         <th className="reportsHeader">Total Utilization</th>

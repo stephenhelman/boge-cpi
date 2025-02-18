@@ -10,6 +10,7 @@ import {
   parseAccountLimit,
   parseResponsibility,
   calculateUtilization,
+  mostRecentLatePayment,
 } from "./accountHelpers";
 
 export const formatRawAccountData = (
@@ -33,12 +34,17 @@ export const formatRawAccountData = (
       "Account Utilization": "",
       "Account Responsibility": "",
       "Payment History": "",
+      "Recent Late": "",
     };
 
     //Payment History
     const paymentHistoryRaw = parsePaymentHistory(account);
     const paymentHistoryFinal = formatPaymentHistory(paymentHistoryRaw);
     accountObj["Payment History"] = paymentHistoryFinal;
+
+    //Late Payment
+    const latePayment = mostRecentLatePayment(paymentHistoryFinal);
+    accountObj["Recent Late"] = latePayment;
 
     const { index } = paymentHistoryRaw;
     const accountData = account.slice(0, index);

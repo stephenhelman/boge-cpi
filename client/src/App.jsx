@@ -1,9 +1,7 @@
-import ReportsTable from "./components/creditReports/ReportsTable";
 import "./app.css";
 import { useState } from "react";
 import FileUpload from "./components/form/FileUpload";
-import AccountSummary from "./components/accountSummary/AccountSummary";
-import { PulseLoader } from "react-spinners";
+import ClientSummary from "./components/clientSummary";
 
 function App() {
   const [showModal, setShowModal] = useState(true);
@@ -13,19 +11,14 @@ function App() {
     <>
       {showModal ? (
         <FileUpload
-          showModal={setShowModal}
+          showModal={showModal}
           setShowModal={setShowModal}
           setIsLoading={setIsLoading}
         />
       ) : null}
-      {!showModal && !isLoading ? (
-        <>
-          <ReportsTable setShowModal={setShowModal} />
-          <AccountSummary />
-        </>
-      ) : (
-        <PulseLoader color={"#000"} />
-      )}
+      {!showModal ? (
+        <ClientSummary setShowModal={setShowModal} isLoading={isLoading} />
+      ) : null}
     </>
   );
 }

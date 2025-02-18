@@ -56,7 +56,7 @@ export const parsePaymentHistory = (account) => {
 
 export const formatPaymentHistory = (paymentHistoryData) => {
   const { data } = paymentHistoryData;
-  const yearRegex = /[0-9]{4,}/;
+  const yearRegex = /\b[0-9]{4,4}\b/;
   const yearArray = [];
   const yearObject = {};
   const paymentHistoryObject = {
@@ -79,11 +79,14 @@ export const formatPaymentHistory = (paymentHistoryData) => {
   ];
 
   //parse years and months from payment history data
-  data.forEach((cell) => {
-    if (yearRegex.test(cell)) {
-      yearArray.push(cell);
+  for (let i = 1; i < data.length; i++) {
+    if (!yearRegex.test(data[i])) {
+      break;
     }
-  });
+    if (yearRegex.test(data[i])) {
+      yearArray.push(data[i]);
+    }
+  }
 
   //group payment status per month
   months.forEach((month) => {
@@ -91,7 +94,6 @@ export const formatPaymentHistory = (paymentHistoryData) => {
     const end = start + yearArray.length;
     yearObject[month] = data.slice(start, end);
   });
-
   return formatPaymentHistoryObject(paymentHistoryObject);
 };
 
@@ -316,4 +318,63 @@ export const areThereDerogatoryMarks = (profile) => {
   const publicRecords = profile["Public Records"].length;
   const derogatoryMarks = collections + publicRecords;
   return derogatoryMarks;
+};
+
+export const mostRecentLatePayment = (paymentHistory) => {
+  const lateRegex = /\b[0-9]{2,3}\b/;
+  const years = Object.keys(paymentHistory);
+  let latePayment = "n/a";
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  years.forEach((year) => {
+    const index = paymentHistory[year].findLastIndex((element) =>
+      lateRegex.test(element)
+    );
+    if (index > -1) {
+      const lateMonth = months[index];
+      const lateYear = year;
+      latePayment = `${lateMonth} ${lateYear}`;
+      return latePayment;
+    }
+  });
+  return latePayment;
+};
+
+const loopAccountsForLates = (accounts, array) => {
+  if (!accounts.length) {
+    return;
+  }
+  accounts.forEach((account) => {
+    if (account["Recent Late"] !== "n/a") {
+      array.push(account["Recent Late"]);
+    }
+  });
+};
+
+export const bureauMostRecentLatePayment = (bureau) => {
+  const openAccounts = bureau["Open Accounts"];
+  const closedAccounts = bureau["Closed Accounts"];
+  const collections = bureau["Collection Accounts"];
+  const publicRecords = bureau["Public Records"];
+
+  const latePayments = [];
+  const categories = [openAccounts, closedAccounts, collections, publicRecords];
+
+  categories.forEach((category) => {
+    loopAccountsForLates(category, latePayments);
+  });
+  return latePayments;
 };

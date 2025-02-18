@@ -4,6 +4,7 @@ import {
   groupRawAccountData,
   groupRawInquiryData,
   formatInquiries,
+  bureauMostRecentLatePayment,
 } from "./accountHelpers";
 import { formatRawAccountData } from "./formatAccounts";
 
@@ -12,7 +13,7 @@ export const formatData = (data, bureau) => {
   const client = {
     "Credit Bureau": bureau,
     "Credit Score": "",
-    "Payment History": "",
+    "Late Payments": "n/a",
     "Utilization %": "",
     "Credit Limit": "",
     "Total Accounts": "",
@@ -135,6 +136,10 @@ export const formatData = (data, bureau) => {
     client,
     "Public Records"
   );
+
+  //most recent late payment
+  const latePayments = bureauMostRecentLatePayment(client);
+  client["Late Payments"] = latePayments;
 
   //final inquiries data
   formatInquiries(inquiriesRaw, inquiriesFinal);

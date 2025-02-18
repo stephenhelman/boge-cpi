@@ -1,3 +1,5 @@
+import { differenceInMonths } from "date-fns";
+
 export const capitalize = (val) => {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 };
@@ -53,4 +55,45 @@ export const formatPaymentHistoryObject = (paymentHistoryObj) => {
     formattedPaymentHistory[years[i]] = paymentArray;
   }
   return formattedPaymentHistory;
+};
+
+export const analyzeLatePayments = (client) => {
+  const experianLates = client?.experian
+    ? client.experian["Late Payments"]
+    : null;
+  const transUnionLates = client?.transUnion
+    ? client.transUnion["Late Payments"]
+    : null;
+  const equifaxLates = client?.equifax ? client.equifax["Late Payments"] : null;
+
+  const experian = experianLates ? compareLates(experianLates)[0] : null;
+  const transUnion = transUnionLates ? compareLates(transUnionLates)[0] : null;
+  const equifax = equifaxLates ? compareLates(equifaxLates)[[0]] : null;
+  const lateArray = [];
+  if (experian) {
+    lateArray.push(experian);
+  }
+  if (transUnion) {
+    lateArray.push(transUnion);
+  }
+  if (equifax) {
+    lateArray.push(equifax);
+  }
+  return lateArray;
+};
+
+export const compareLates = (lateArray) => {
+  const today = Date.now();
+
+  return [...lateArray].sort((a, b) => {
+    const differenceA = differenceInMonths(today, a);
+    const differenceB = differenceInMonths(today, b);
+
+    if (differenceA > differenceB) {
+      return 1;
+    }
+    if (differenceA < differenceB) {
+      return -1;
+    }
+  });
 };
