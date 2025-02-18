@@ -71,6 +71,9 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
       formData.append("TransUnion", transUnion);
       formData.append("Equifax", equifax);
     }
+    setIsLoading(true);
+    setShowModal(false);
+    setShowForm(false);
 
     const results = await axios.post(postUrl, formData, config);
     const { data } = results.data;
@@ -88,19 +91,15 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
       client.equifax = formatData(equifax, "Equifax");
     }
     const bureau = Object.keys(client)[0];
-    setIsLoading(true);
-    setShowModal(false);
-    setShowForm(false);
-    setTimeout(() => {
-      dispatch(
-        setLogistics({
-          client: client,
-          bureau: client[bureau]["Credit Bureau"],
-        })
-      );
 
-      setIsLoading(false);
-    }, 2500);
+    dispatch(
+      setLogistics({
+        client: client,
+        bureau: client[bureau]["Credit Bureau"],
+      })
+    );
+
+    setIsLoading(false);
   };
 
   const handleExperianUpload = (e) => {
