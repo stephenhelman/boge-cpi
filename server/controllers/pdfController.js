@@ -1,5 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
-const parsePDFData = require("../middleware/test");
+const parsePDFData = require("../middleware/helpers");
 
 // @desc receive 3 pdf reports and send parsed data
 // @route POST /
@@ -36,9 +36,9 @@ const creditReport = expressAsyncHandler(async (req, res) => {
     equifax: "",
   };
 
-  client.experian = await parsePDFData(experian, "Experian");
-  client.transUnion = await parsePDFData(transUnion, "TransUnion");
-  client.equifax = await parsePDFData(equifax, "Equifax");
+  client.experian = await parsePDFData(experian);
+  client.transUnion = await parsePDFData(transUnion);
+  client.equifax = await parsePDFData(equifax);
   res.json({ data: client });
 });
 
@@ -63,7 +63,7 @@ const experianReport = expressAsyncHandler(async (req, res) => {
     experian: "",
   };
 
-  client.experian = await parsePDFData(experian, "Experian");
+  client.experian = await parsePDFData(experian);
   res.json({ data: client });
 });
 
@@ -87,7 +87,7 @@ const transunionReport = expressAsyncHandler(async (req, res) => {
     transUnion: "",
   };
 
-  client.transUnion = await parsePDFData(transunion, "TransUnion");
+  client.transUnion = await parsePDFData(transunion);
   res.json({ data: client });
 });
 
@@ -110,7 +110,7 @@ const equifaxReport = expressAsyncHandler(async (req, res) => {
     equifax: "",
   };
 
-  client.equifax = await parsePDFData(equifax, "Equifax");
+  client.equifax = await parsePDFData(equifax);
   res.json({ data: client });
 });
 
@@ -128,13 +128,13 @@ const multiReport = expressAsyncHandler(async (req, res) => {
   const equifax = files.filter((file) => file.fieldname === "Equifax");
   const client = {};
   if (experian.length) {
-    client.experian = await parsePDFData(experian[0].path, "Experian");
+    client.experian = await parsePDFData(experian[0].path);
   }
   if (transUnion.length) {
-    client.transUnion = await parsePDFData(transUnion[0].path, "TransUnion");
+    client.transUnion = await parsePDFData(transUnion[0].path);
   }
   if (equifax.length) {
-    client.equifax = await parsePDFData(equifax[0].path, "Equifax");
+    client.equifax = await parsePDFData(equifax[0].path);
   }
   res.json({ data: client });
 });

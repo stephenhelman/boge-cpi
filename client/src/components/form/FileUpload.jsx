@@ -1,8 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import Information from "./Information";
+import { formatData } from "../../util/formatClient";
+import { useDispatch } from "react-redux";
+import { setLogistics, setClient, reset } from "../../clientSlice";
 
-const FileUpload = ({ setClient, showModal, setShowModal, setBureau }) => {
+const FileUpload = ({ showModal, setShowModal }) => {
   const [showForm, setShowForm] = useState(false);
   const [showExperian, setShowExperian] = useState(false);
   const [showTransUnion, setShowTransUnion] = useState(false);
@@ -10,6 +13,8 @@ const FileUpload = ({ setClient, showModal, setShowModal, setBureau }) => {
   const [experian, setExperian] = useState([]);
   const [transUnion, setTransUnion] = useState([]);
   const [equifax, setEquifax] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +32,12 @@ const FileUpload = ({ setClient, showModal, setShowModal, setBureau }) => {
     const formData = new FormData();
 
     const config = { headers: { "Content-Type": "multipart/form-data" } };
+    //dev url
+    /* let postUrl = "http://localhost:3500"; */
+
+    //production url
     let postUrl = "https://boge-cpi.onrender.com/api";
+
     //determine which options are selected
     if (experian.name && !transUnion.name && !equifax.name) {
       formData.append("Experian", experian);
@@ -63,32 +73,46 @@ const FileUpload = ({ setClient, showModal, setShowModal, setBureau }) => {
     }
 
     const results = await axios.post(postUrl, formData, config);
-    setClient(results.data.data);
+    const { data } = results.data;
+    const client = {};
+    if (data.experian) {
+      const { experian } = data;
+      client.experian = formatData(experian, "Experian");
+    }
+    if (data.transUnion) {
+      const { transUnion } = data;
+      client.transUnion = formatData(transUnion, "TransUnion");
+    }
+    if (data.equifax) {
+      const { equifax } = data;
+      client.equifax = formatData(equifax, "Equifax");
+    }
+    const bureau = Object.keys(client)[0];
+    dispatch(
+      setLogistics({ client: client, bureau: client[bureau]["Credit Bureau"] })
+    );
+
     setShowModal(false);
     setShowForm(false);
-    console.log(Object.keys(results.data.data)[0]);
-    const { data } = results.data;
-    const bureau = Object.keys(data)[0];
-    setBureau(data[bureau]["Credit Bureau"]);
   };
 
   const handleExperianUpload = (e) => {
-    setClient({});
+    dispatch(setClient(null));
     setExperian(e.target.files[0]);
   };
 
   const handleTransUnionUpload = (e) => {
-    setClient({});
+    dispatch(setClient(null));
     setTransUnion(e.target.files[0]);
   };
 
   const handleEquifaxUpload = (e) => {
-    setClient({});
+    dispatch(setClient(null));
     setEquifax(e.target.files[0]);
   };
 
   const handleResetClicked = () => {
-    setClient({});
+    dispatch(reset);
     setExperian([]);
     setTransUnion([]);
     setEquifax([]);

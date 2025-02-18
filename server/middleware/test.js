@@ -3,9 +3,9 @@ const PDF = require("pdf-parse");
 const fns = require("date-fns");
 const { differenceInDays } = fns;
 
-/* let dataBuffer = fs.readFileSync(
-  "/Users/stephenhelman/Desktop/Richard Taylor/Edwin Jambo/Stephen - TU.pdf"
-); */
+let dataBuffer = fs.readFileSync(
+  "/Users/stephenhelman/Desktop/Richard Taylor/Edwin Jambo/Experian.pdf"
+);
 
 const formatData = (data, bureau) => {
   // PDF text
@@ -382,5 +382,9 @@ const parsePDFData = async (report, bureau) => {
   const reportData = formatData(data, bureau);
   return reportData;
 };
+
+const client = await parsePDFData(dataBuffer, "Experian");
+
+console.log(client);
 
 module.exports = parsePDFData;

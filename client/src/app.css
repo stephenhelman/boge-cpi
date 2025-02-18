@@ -7,16 +7,17 @@
 
 .App {
   max-width: 1440px;
-  height: 100%;
+  height: auto;
+  min-height: 100vh;
   width: 100%;
   margin: 0 auto;
 }
 
 .infoSelect {
   max-width: 1280px;
-  min-width: 500px;
+  min-width: 900px;
   max-height: 100vh;
-  min-height: 500px;
+  min-height: 90vh;
   background-color: white;
   gap: 10px;
   border: 1px solid black;
@@ -46,16 +47,6 @@
   align-items: center;
 }
 
-.infoButton {
-  width: 80%;
-  margin: auto auto 5px auto;
-  font-size: 1rem;
-  padding: 5px 10px;
-  border: 1px solid black;
-  border-radius: 8px;
-  justify-self: center;
-}
-
 .overlay {
   width: 100%;
   min-height: 100vh;
@@ -68,7 +59,7 @@
   max-width: 1280px;
   min-width: 900px;
   max-height: 100vh;
-  min-height: 900px;
+  min-height: 90vh;
   background-color: white;
   border-radius: 8px;
   display: flex;
@@ -94,6 +85,27 @@
   justify-content: space-evenly;
 }
 
+.titleContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  margin: 5px 0;
+}
+
+.tableButton {
+  text-decoration: underline;
+  color: #333;
+  display: grid;
+  place-content: center;
+}
+
+.tableButton:hover {
+  color: hsl(0, 0%, 40%);
+  cursor: pointer;
+}
+
 .inputContainer {
   display: flex;
   flex-direction: column;
@@ -112,23 +124,12 @@
 }
 
 .buttonContainer {
+  margin: auto 0 5px;
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
-
-.formButton {
-  padding: 2px 5px;
-  border: 1px solid black;
-  background-color: rgb(245, 245, 245);
-  color: #333;
-  border-radius: 8px;
-  margin: 5px;
-}
-
-.formButton:hover {
-  background-color: rgb(209, 207, 207);
+  padding: 0 5px;
 }
 
 .reportsContainer {
@@ -167,15 +168,22 @@
   border: 1px solid black;
 }
 
-.newButton {
-  width: 25%;
-  margin: 10px;
-  border: 1px solid black;
+.accountsContainer {
+  border: 1px solid #333;
+  border-bottom: none;
+  padding: 10px;
+  margin: 0 auto;
+  height: auto;
 }
 
-.accountsContainer {
-  margin: 10px;
-  height: auto;
+.accountSummary > .accountsContainer:nth-child(4) {
+  border-bottom: 1px solid black;
+}
+
+.accountSummary {
+  min-width: 1440px;
+  min-width: 1280px;
+  width: 100%;
 }
 
 .accountsTable {
@@ -183,6 +191,7 @@
   border: 1px solid black;
   border-collapse: collapse;
   margin-bottom: 0;
+  width: 100%;
 }
 
 .accountsHeaderMain {
@@ -199,11 +208,14 @@
   font-size: 0.95rem;
 }
 
-.accountsRow {
-  height: 30px;
+.accountsRow,
+.nameCell {
+  height: 40px;
   text-align: center;
+  font-size: 0.8rem;
+}
+.accountsRow {
   border: 1px solid black;
-  font-size: 0.885rem;
 }
 
 .buttonsContainer {
@@ -211,18 +223,85 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
-button {
-  font-size: 1.25rem;
+.active:hover {
+  background-color: #3333336e;
+  color: white;
+}
+
+.paymentHistory {
+  background-color: transparent;
   border: none;
   outline: none;
+  color: #333;
+}
+
+.paymentHistory:hover {
+  cursor: pointer;
+  color: hsl(0, 0%, 40%);
+}
+
+.nameCell {
+  text-align: center;
+
+  border: 1px solid black;
+}
+
+.authorizedUser {
+  color: rgb(0, 0, 255);
+}
+
+.infoButton {
+  width: 80%;
+  margin: auto auto 5px auto;
+  font-size: 1rem;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 8px;
+  justify-self: center;
   background-color: white;
-  border: 0.25px solid black;
+}
+
+.infoButton:hover {
+  cursor: pointer;
+  background-color: rgb(209, 207, 207);
+}
+
+.formButton {
+  padding: 2px 5px;
+  border: 1px solid black;
+  background-color: rgb(245, 245, 245);
+  color: #333;
+  border-radius: 8px;
+}
+
+.formButton:hover {
+  cursor: pointer;
+  background-color: rgb(209, 207, 207);
+}
+
+.newButton {
+  width: 25%;
+  margin: 10px;
+  border: 1px solid black;
+}
+
+.bureauButton {
+  border: none;
+  outline: none;
   border-top: none;
 }
 
-button:hover {
+.bureauButton:hover {
   background-color: grey;
   cursor: pointer;
+}
+
+.formButton,
+.bureauButton,
+.newButton {
+  font-size: 1.25rem;
+  background-color: white;
+  border: 0.25px solid black;
 }
 
 .active {
@@ -230,7 +309,46 @@ button:hover {
   color: white;
 }
 
-.active:hover {
-  background-color: #3333336e;
-  color: white;
+.paymentHistoryGrid {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  height: auto;
+  padding: 15px 5px;
+  background-color: whitesmoke;
+}
+
+.paymentHistoryMonths,
+.paymentHistoryYears {
+  margin: 2px 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100px repeat(12, 1fr);
+  justify-content: center;
+  align-items: center;
+}
+
+.gridCell {
+  display: grid;
+  place-content: center;
+}
+
+.noPaymentHistory {
+  width: 100%;
+  text-align: center;
+  background-color: whitesmoke;
+  padding: 15px 5px;
+  font-weight: bold;
+}
+
+.derogatory {
+  color: red;
+  font-weight: bold;
+}
+
+.clear {
+  color: green;
+  font-weight: bold;
 }

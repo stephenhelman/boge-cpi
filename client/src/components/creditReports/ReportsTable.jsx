@@ -1,7 +1,10 @@
-const ReportsTable = ({ client, setClient, setShowModal }) => {
-  if (!Object.keys(client).length) {
-    return null;
-  }
+import { areThereDerogatoryMarks } from "../../util/accountHelpers";
+import { selectCurrentClient, reset } from "../../clientSlice";
+import { useSelector, useDispatch } from "react-redux";
+
+const ReportsTable = ({ setShowModal }) => {
+  const client = useSelector(selectCurrentClient);
+  const dispatch = useDispatch();
   const experian = client?.experian ? client.experian : null;
   const transUnion = client?.transUnion ? client.transUnion : null;
   const equifax = client?.equifax ? client.equifax : null;
@@ -11,7 +14,7 @@ const ReportsTable = ({ client, setClient, setShowModal }) => {
   ) : null;
 
   const transUnionHeader = transUnion ? (
-    <td className="reportsHeaderTop">Transunion</td>
+    <td className="reportsHeaderTop">TransUnion</td>
   ) : null;
 
   const equifaxHeader = equifax ? (
@@ -23,13 +26,13 @@ const ReportsTable = ({ client, setClient, setShowModal }) => {
       <tr>
         <th className="reportsHeader">Credit Score</th>
         {experian ? (
-          <td className="reportsCell">{experian["Fico Score"]}</td>
+          <td className="reportsCell">{experian["Credit Score"]}</td>
         ) : null}
         {transUnion ? (
-          <td className="reportsCell">{transUnion["Fico Score"]}</td>
+          <td className="reportsCell">{transUnion["Credit Score"]}</td>
         ) : null}
         {equifax ? (
-          <td className="reportsCell">{equifax["Fico Score"]}</td>
+          <td className="reportsCell">{equifax["Credit Score"]}</td>
         ) : null}
       </tr>
       <tr>
@@ -51,41 +54,50 @@ const ReportsTable = ({ client, setClient, setShowModal }) => {
       <tr>
         <th className="reportsHeader">Total Credit Limit</th>
         {experian ? (
-          <td className="reportsCell">{experian["Credit limit"]}</td>
+          <td className="reportsCell">{experian["Credit Limit"]}</td>
         ) : null}
         {transUnion ? (
-          <td className="reportsCell">{transUnion["Credit limit"]}</td>
+          <td className="reportsCell">{transUnion["Credit Limit"]}</td>
         ) : null}
         {equifax ? (
-          <td className="reportsCell">{equifax["Credit limit"]}</td>
+          <td className="reportsCell">{equifax["Credit Limit"]}</td>
         ) : null}
       </tr>
       <tr>
         <th className="reportsHeader">Derogatory Marks</th>
-        <td className="reportsCell"></td>
+
+        {experian ? (
+          <td className="reportsCell">{areThereDerogatoryMarks(experian)}</td>
+        ) : null}
+        {transUnion ? (
+          <td className="reportsCell">{areThereDerogatoryMarks(transUnion)}</td>
+        ) : null}
+        {equifax ? (
+          <td className="reportsCell">{areThereDerogatoryMarks(equifax)}</td>
+        ) : null}
       </tr>
       <tr>
         <th className="reportsHeader">Total Accounts</th>
         {experian ? (
-          <td className="reportsCell">{experian["Open accounts"]}</td>
+          <td className="reportsCell">{experian["Total Accounts"]}</td>
         ) : null}
         {transUnion ? (
-          <td className="reportsCell">{transUnion["Open accounts"]}</td>
+          <td className="reportsCell">{transUnion["Total Accounts"]}</td>
         ) : null}
         {equifax ? (
-          <td className="reportsCell">{equifax["Open accounts"]}</td>
+          <td className="reportsCell">{equifax["Total Accounts"]}</td>
         ) : null}
       </tr>
       <tr>
         <th className="reportsHeader">Avg Age History</th>
         {experian ? (
-          <td className="reportsCell">{experian["Average account age"]}</td>
+          <td className="reportsCell">{experian["Average Age History"]}</td>
         ) : null}
         {transUnion ? (
-          <td className="reportsCell">{transUnion["Average account age"]}</td>
+          <td className="reportsCell">{transUnion["Average Age History"]}</td>
         ) : null}
         {equifax ? (
-          <td className="reportsCell">{equifax["Average account age"]}</td>
+          <td className="reportsCell">{equifax["Average Age History"]}</td>
         ) : null}
       </tr>
       <tr>
@@ -128,7 +140,7 @@ const ReportsTable = ({ client, setClient, setShowModal }) => {
   );
 
   const handleNewReport = () => {
-    setClient({});
+    dispatch(reset());
     setShowModal(true);
   };
 

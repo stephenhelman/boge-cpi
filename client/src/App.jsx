@@ -1,36 +1,21 @@
 import ReportsTable from "./components/creditReports/ReportsTable";
-import AccountsTable from "./components/creditAcounts/AccountsTable";
 import "./app.css";
 import { useState } from "react";
 import FileUpload from "./components/form/FileUpload";
+import AccountSummary from "./components/accountSummary/AccountSummary";
 
 function App() {
-  const [client, setClient] = useState({});
   const [showModal, setShowModal] = useState(true);
-  const [bureau, setBureau] = useState("");
+
   return (
     <>
       {showModal ? (
-        <FileUpload
-          setClient={setClient}
-          showModal={setShowModal}
-          setShowModal={setShowModal}
-          setBureau={setBureau}
-        />
+        <FileUpload showModal={setShowModal} setShowModal={setShowModal} />
       ) : null}
-
-      {Object.keys(client).length ? (
+      {!showModal ? (
         <>
-          <ReportsTable
-            client={client}
-            setClient={setClient}
-            setShowModal={setShowModal}
-          />
-          <AccountsTable
-            client={client}
-            bureau={bureau}
-            setBureau={setBureau}
-          />
+          <ReportsTable setShowModal={setShowModal} />
+          <AccountSummary />
         </>
       ) : null}
     </>

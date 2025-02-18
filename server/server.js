@@ -14,6 +14,10 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
+//dev routes
+/* app.use("/", require("./routes/pdfRouter.js")); */
+
+//production routes
 app.use("/api", require("./routes/pdfRouter.js"));
 
 if (process.env.NODE_ENV === "production") {
