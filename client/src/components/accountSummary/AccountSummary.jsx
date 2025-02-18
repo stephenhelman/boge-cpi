@@ -11,10 +11,10 @@ const AccountSummary = () => {
   const transUnion = client?.transUnion ? client.transUnion : null;
   const equifax = client?.equifax ? client.equifax : null;
 
-  let openAccounts = client.experian["Open Accounts"];
-  let closedAccounts = client.experian["Closed Accounts"];
-  let collections = client.experian["Collection Accounts"];
-  let publicRecords = client.experian["Public Records"];
+  let openAccounts;
+  let closedAccounts;
+  let collections;
+  let publicRecords;
 
   if (bureau === "Experian") {
     openAccounts = client.experian["Open Accounts"];

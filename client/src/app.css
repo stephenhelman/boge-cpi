@@ -261,7 +261,8 @@
   background-color: white;
 }
 
-.infoButton:hover {
+.infoButton:hover,
+.newButton:hover {
   cursor: pointer;
   background-color: rgb(209, 207, 207);
 }
