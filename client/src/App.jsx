@@ -1,7 +1,7 @@
 import "./app.css";
 import { useState } from "react";
 import FileUpload from "./components/form/FileUpload";
-import ClientSummary from "./components/clientSummary";
+import ClientSummary from "./components/ClientSummary";
 
 function App() {
   const [showModal, setShowModal] = useState(true);
