@@ -14,6 +14,7 @@ function App() {
           showModal={showModal}
           setShowModal={setShowModal}
           setIsLoading={setIsLoading}
+          issLoading={isLoading}
         />
       ) : null}
       {!showModal ? (

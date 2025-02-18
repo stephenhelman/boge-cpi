@@ -4,8 +4,9 @@ import Information from "./Information";
 import { formatData } from "../../util/formatClient";
 import { useDispatch } from "react-redux";
 import { setLogistics, setClient, reset } from "../../clientSlice";
+import { PulseLoader } from "react-spinners";
 
-const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
+const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
   const [showForm, setShowForm] = useState(false);
   const [showExperian, setShowExperian] = useState(false);
   const [showTransUnion, setShowTransUnion] = useState(false);
@@ -18,6 +19,7 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (
       (showExperian && !experian.name) ||
@@ -71,7 +73,7 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
       formData.append("TransUnion", transUnion);
       formData.append("Equifax", equifax);
     }
-    setIsLoading(true);
+
     setShowModal(false);
     setShowForm(false);
 
@@ -205,7 +207,9 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
     </div>
   ) : null;
 
-  return modal;
+  const rendered = isLoading ? <PulseLoader color={"#000"} /> : modal;
+
+  return rendered;
 };
 
 export default FileUpload;
