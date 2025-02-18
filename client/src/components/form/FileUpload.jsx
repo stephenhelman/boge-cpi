@@ -5,7 +5,7 @@ import { formatData } from "../../util/formatClient";
 import { useDispatch } from "react-redux";
 import { setLogistics, setClient, reset } from "../../clientSlice";
 
-const FileUpload = ({ showModal, setShowModal }) => {
+const FileUpload = ({ showModal, setShowModal, setIsLoading }) => {
   const [showForm, setShowForm] = useState(false);
   const [showExperian, setShowExperian] = useState(false);
   const [showTransUnion, setShowTransUnion] = useState(false);
@@ -88,12 +88,19 @@ const FileUpload = ({ showModal, setShowModal }) => {
       client.equifax = formatData(equifax, "Equifax");
     }
     const bureau = Object.keys(client)[0];
-    dispatch(
-      setLogistics({ client: client, bureau: client[bureau]["Credit Bureau"] })
-    );
+    setIsLoading(true);
+    setTimeout(() => {
+      dispatch(
+        setLogistics({
+          client: client,
+          bureau: client[bureau]["Credit Bureau"],
+        })
+      );
 
-    setShowModal(false);
-    setShowForm(false);
+      setShowModal(false);
+      setShowForm(false);
+      setIsLoading(false);
+    }, 2500);
   };
 
   const handleExperianUpload = (e) => {
