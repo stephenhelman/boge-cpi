@@ -154,7 +154,7 @@ export const formatData = (data, bureau) => {
   //add inquiries to client
   parseInquiryNumbers(inquiriesFinal, client);
 
-  console.log(client);
+  /* console.log(client); */
 
   /* fundingReadiness(client); */
 

@@ -126,7 +126,6 @@ export const determinePDFSource = (source) => {
   let equifaxSource = pdfSourceParse(equifax);
 
   const sourceArray = [experianSource, transUnionSource, equifaxSource];
-  console.log(sourceArray);
 
   return sourceArray;
 };
