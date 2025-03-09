@@ -378,3 +378,58 @@ export const bureauMostRecentLatePayment = (bureau) => {
   });
   return latePayments;
 };
+
+export const lateAccountsGrouping = (bureau) => {
+  const lateAccounts = [];
+
+  const openAccounts = bureau["Open Accounts"];
+  const closedAccounts = bureau["Closed Accounts"];
+  const collections = bureau["Collection Accounts"];
+  const publicRecords = bureau["Public Records"];
+
+  const categories = [openAccounts, closedAccounts, collections, publicRecords];
+
+  const loopAccountsToGroup = (accounts) => {
+    if (!accounts.length) {
+      return;
+    }
+    accounts.forEach((account) => {
+      if (account["Recent Late"] !== "n/a") {
+        lateAccounts.push(account);
+      }
+    });
+  };
+
+  categories.forEach((category) => {
+    loopAccountsToGroup(category);
+  });
+
+  return lateAccounts;
+};
+
+const countLatePayment = (history, type) => {
+  let counter = 0;
+  const paymentHistory = Object.values(history);
+  paymentHistory.forEach((year) => {
+    year.forEach((month) => {
+      if (month === type) {
+        counter++;
+      } else {
+        return;
+      }
+    });
+  });
+  return counter;
+};
+
+export const addLatePaymentsToAccount = (paymentHistory) => {
+  const latePaymentObject = {
+    thirty: countLatePayment(paymentHistory, "30"),
+    sixty: countLatePayment(paymentHistory, "60"),
+    ninety: countLatePayment(paymentHistory, "90"),
+    oneTwenty: countLatePayment(paymentHistory, "120"),
+    oneFifty: countLatePayment(paymentHistory, "150"),
+  };
+
+  return latePaymentObject;
+};

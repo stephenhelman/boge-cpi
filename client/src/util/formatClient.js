@@ -5,8 +5,10 @@ import {
   groupRawInquiryData,
   formatInquiries,
   bureauMostRecentLatePayment,
+  lateAccountsGrouping,
 } from "./accountHelpers";
 import { formatRawAccountData } from "./formatAccounts";
+import { fundingReadiness } from "./fundingReadiness";
 
 export const formatData = (data, bureau) => {
   //establish client
@@ -27,6 +29,7 @@ export const formatData = (data, bureau) => {
     "Collection Accounts": [],
     "Public Records": [],
     "Inquiries Info": [],
+    "Late Accounts": [],
   };
 
   // PDF text
@@ -141,11 +144,19 @@ export const formatData = (data, bureau) => {
   const latePayments = bureauMostRecentLatePayment(client);
   client["Late Payments"] = latePayments;
 
+  //late accounts
+  const lateAccounts = lateAccountsGrouping(client);
+  client["Late Accounts"] = lateAccounts;
+
   //final inquiries data
   formatInquiries(inquiriesRaw, inquiriesFinal);
 
   //add inquiries to client
   parseInquiryNumbers(inquiriesFinal, client);
+
+  console.log(client);
+
+  /* fundingReadiness(client); */
 
   return client;
 };

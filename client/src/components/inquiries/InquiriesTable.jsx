@@ -1,30 +1,29 @@
-import AccountsHeader from "./AccountsHeader";
-import Accounts from "./Accounts";
 import { useState } from "react";
+import InquiriesHeader from "./InquiriesHeader";
+import Inquiries from "./Inquiries";
 
-const AccountsTable = ({ accounts, identifier }) => {
+const InquiriesTable = ({ inquiries, identifier }) => {
   const [showTable, setShowTable] = useState(false);
-
   const toggleTable = () => {
     setShowTable((prev) => !prev);
   };
 
   return (
-    <div className="accountsContainer">
+    <div className="inquiryContainer">
       <div className="titleContainer">
-        <h2 className="tableTitle">{identifier}</h2>
+        <h3 className="tableTitle">{identifier}</h3>
         <p className="tableButton" onClick={toggleTable}>
           {!showTable ? "Show" : "Hide"}
         </p>
       </div>
       {showTable ? (
         <table className="accountsTable">
-          <AccountsHeader identifier={identifier} />
-          <Accounts accounts={accounts} identifier={identifier} />
+          <InquiriesHeader />
+          <Inquiries inquiries={inquiries} identifier={identifier} />
         </table>
       ) : null}
     </div>
   );
 };
 
-export default AccountsTable;
+export default InquiriesTable;

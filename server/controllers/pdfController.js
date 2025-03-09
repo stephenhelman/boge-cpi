@@ -39,7 +39,7 @@ const creditReport = expressAsyncHandler(async (req, res) => {
   client.experian = await parsePDFData(experian);
   client.transUnion = await parsePDFData(transUnion);
   client.equifax = await parsePDFData(equifax);
-  res.json({ data: client });
+  res.send(client);
 });
 
 //@desc receive 1 pdf report - experian only
@@ -64,7 +64,7 @@ const experianReport = expressAsyncHandler(async (req, res) => {
   };
 
   client.experian = await parsePDFData(experian);
-  res.json({ data: client });
+  res.send(client);
 });
 
 //@desc receive 1 pdf report - transUnion only
@@ -88,7 +88,7 @@ const transunionReport = expressAsyncHandler(async (req, res) => {
   };
 
   client.transUnion = await parsePDFData(transunion);
-  res.json({ data: client });
+  res.send(client);
 });
 
 //@desc receive 1 pdf report - equifax only
@@ -111,7 +111,7 @@ const equifaxReport = expressAsyncHandler(async (req, res) => {
   };
 
   client.equifax = await parsePDFData(equifax);
-  res.json({ data: client });
+  res.send(client);
 });
 
 const multiReport = expressAsyncHandler(async (req, res) => {
@@ -136,7 +136,7 @@ const multiReport = expressAsyncHandler(async (req, res) => {
   if (equifax.length) {
     client.equifax = await parsePDFData(equifax[0].path);
   }
-  res.json({ data: client });
+  res.send(client);
 });
 
 module.exports = {

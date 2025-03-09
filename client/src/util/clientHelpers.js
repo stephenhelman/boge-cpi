@@ -36,6 +36,33 @@ export const assignClientInfo = (accountSummary, client) => {
   client["Credit Used"] = creditUsed;
 };
 
+const formatInquiryObj = (inquiryArray, today) => {
+  const ninety = [];
+  const oneEighty = [];
+  const other = [];
+
+  inquiryArray.forEach((inquiry) => {
+    const { dateOpen } = inquiry;
+    const difference = differenceInDays(today, dateOpen);
+    if (difference < 90) {
+      ninety.push(inquiry);
+    }
+    if (difference > 90 && difference < 180) {
+      oneEighty.push(inquiry);
+    }
+    if (difference > 180) {
+      other.push(inquiry);
+    }
+  });
+
+  const inquiryObj = {
+    ninety: ninety,
+    oneEighty: oneEighty,
+    other: other,
+  };
+  return inquiryObj;
+};
+
 export const parseInquiryNumbers = (finalArray, client) => {
   let threeMonths = 0;
   let sixMonths = 0;
@@ -55,5 +82,5 @@ export const parseInquiryNumbers = (finalArray, client) => {
   client["Total Inquiries"] = finalArray.length;
   client["Inquiries 3 mos"] = threeMonths;
   client["Inquiries 6 mos"] = sixMonths;
-  client["Inquiries Info"] = finalArray;
+  client["Inquiries Info"] = formatInquiryObj(finalArray, today);
 };

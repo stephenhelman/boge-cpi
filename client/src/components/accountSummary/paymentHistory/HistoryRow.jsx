@@ -1,4 +1,3 @@
-import { formatPaymentHistoryObject } from "../../../util/universalHelpers";
 import HistoryMonths from "./HistoryMonths";
 import HistoryYear from "./HistoryYear";
 

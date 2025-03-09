@@ -11,6 +11,7 @@ import {
   parseResponsibility,
   calculateUtilization,
   mostRecentLatePayment,
+  addLatePaymentsToAccount,
 } from "./accountHelpers";
 
 export const formatRawAccountData = (
@@ -35,6 +36,7 @@ export const formatRawAccountData = (
       "Account Responsibility": "",
       "Payment History": "",
       "Recent Late": "",
+      "Times Late": "n/a",
     };
 
     //Payment History
@@ -45,6 +47,11 @@ export const formatRawAccountData = (
     //Late Payment
     const latePayment = mostRecentLatePayment(paymentHistoryFinal);
     accountObj["Recent Late"] = latePayment;
+
+    if (latePayment.length) {
+      const timesLate = addLatePaymentsToAccount(paymentHistoryFinal);
+      accountObj["Times Late"] = timesLate;
+    }
 
     const { index } = paymentHistoryRaw;
     const accountData = account.slice(0, index);

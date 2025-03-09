@@ -78,19 +78,28 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
     setShowForm(false);
 
     const results = await axios.post(postUrl, formData, config);
-    const { data } = results.data;
+
+    const { data } = results;
+
     const client = {};
+    const source = {};
     if (data.experian) {
       const { experian } = data;
+      const { info } = experian;
       client.experian = formatData(experian, "Experian");
+      source.experian = info;
     }
     if (data.transUnion) {
       const { transUnion } = data;
+      const { info } = transUnion;
       client.transUnion = formatData(transUnion, "TransUnion");
+      source.transUnion = info;
     }
     if (data.equifax) {
       const { equifax } = data;
+      const { info } = equifax;
       client.equifax = formatData(equifax, "Equifax");
+      source.equifax = info;
     }
     const bureau = Object.keys(client)[0];
 
@@ -98,6 +107,7 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
       setLogistics({
         client: client,
         bureau: client[bureau]["Credit Bureau"],
+        source: source,
       })
     );
 

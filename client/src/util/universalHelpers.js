@@ -97,3 +97,36 @@ export const compareLates = (lateArray) => {
     }
   });
 };
+
+const pdfSourceParse = (source) => {
+  let pdfSource;
+  if (!source) return null;
+  const creator = source?.Creator;
+  if (!creator) {
+    pdfSource = false;
+    return pdfSource;
+  }
+  const splitSource = creator.split(" ");
+  splitSource.forEach((element) => {
+    if (element.includes("Helper")) {
+      pdfSource = false;
+      return pdfSource;
+    }
+  });
+  return pdfSource;
+};
+
+export const determinePDFSource = (source) => {
+  const experian = source?.experian ? source.experian : null;
+  const transUnion = source?.transUnion ? source.transUnion : null;
+  const equifax = source?.equifax ? source.equifax : null;
+
+  let experianSource = pdfSourceParse(experian);
+  let transUnionSource = pdfSourceParse(transUnion);
+  let equifaxSource = pdfSourceParse(equifax);
+
+  const sourceArray = [experianSource, transUnionSource, equifaxSource];
+  console.log(sourceArray);
+
+  return sourceArray;
+};

@@ -1,10 +1,15 @@
 import { areThereDerogatoryMarks } from "../../util/accountHelpers";
-import { selectCurrentClient, reset } from "../../clientSlice";
+import {
+  selectCurrentClient,
+  reset,
+  selectCurrentSource,
+} from "../../clientSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { analyzeLatePayments, compareLates } from "../../util/universalHelpers";
 
 const ReportsTable = ({ setShowModal }) => {
   const client = useSelector(selectCurrentClient);
+  const source = useSelector(selectCurrentSource);
   const dispatch = useDispatch();
   const experian = client?.experian ? client.experian : null;
   const transUnion = client?.transUnion ? client.transUnion : null;
