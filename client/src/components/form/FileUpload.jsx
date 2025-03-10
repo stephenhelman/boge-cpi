@@ -1,36 +1,35 @@
 import axios from "axios";
 import { useState } from "react";
-import Information from "./Information";
 import { formatData } from "../../util/formatClient";
 import { useDispatch } from "react-redux";
-import { setLogistics, setClient, reset } from "../../clientSlice";
+import { setLogistics, setSource, reset } from "../../clientSlice";
 import { PulseLoader } from "react-spinners";
+import useOptions from "../../hooks/useOptions";
+import { useNavigate } from "react-router-dom";
+import { determinePDFSource } from "../../util/universalHelpers";
 
-const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
-  const [showForm, setShowForm] = useState(false);
-  const [showExperian, setShowExperian] = useState(false);
-  const [showTransUnion, setShowTransUnion] = useState(false);
-  const [showEquifax, setShowEquifax] = useState(false);
-  const [experian, setExperian] = useState([]);
-  const [transUnion, setTransUnion] = useState([]);
-  const [equifax, setEquifax] = useState([]);
+const FileUpload = () => {
+  const [experianReport, setExperianReport] = useState([]);
+  const [transUnionReport, setTransUnionReport] = useState([]);
+  const [equifaxReport, setEquifaxReport] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { showExperian, showTransUnion, showEquifax } = useOptions();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
     if (
-      (showExperian && !experian.name) ||
-      (showTransUnion && !transUnion.name) ||
-      (showEquifax && !equifax.name) ||
-      (!experian.name && !transUnion.name && !equifax.name)
+      (showExperian && !experianReport.name) ||
+      (showTransUnion && !transUnionReport.name) ||
+      (showEquifax && !equifaxReport.name) ||
+      (!experianReport.name && !transUnionReport.name && !equifaxReport.name)
     ) {
       alert("Please upload a credit report to continue");
       return;
     }
-
+    setIsLoading(true);
     const formData = new FormData();
 
     const config = { headers: { "Content-Type": "multipart/form-data" } };
@@ -41,41 +40,38 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
     let postUrl = "https://boge-cpi.onrender.com/api";
 
     //determine which options are selected
-    if (experian.name && !transUnion.name && !equifax.name) {
-      formData.append("Experian", experian);
+    if (experianReport.name && !transUnionReport.name && !equifaxReport.name) {
+      formData.append("Experian", experianReport);
       postUrl += "/experian";
     }
-    if (transUnion.name && !experian.name && !equifax.name) {
-      formData.append("TransUnion", transUnion);
+    if (transUnionReport.name && !experianReport.name && !equifaxReport.name) {
+      formData.append("TransUnion", transUnionReport);
       postUrl += "/transunion";
     }
-    if (equifax.name && !experian.name && !transUnion.name) {
-      formData.append("Equifax", equifax);
+    if (equifaxReport.name && !experianReport.name && !transUnionReport.name) {
+      formData.append("Equifax", equifaxReport);
       postUrl += "/equifax";
     }
-    if (experian.name && transUnion.name && !equifax.name) {
-      formData.append("Experian", experian);
-      formData.append("TransUnion", transUnion);
+    if (experianReport.name && transUnionReport.name && !equifaxReport.name) {
+      formData.append("Experian", experianReport);
+      formData.append("TransUnion", transUnionReport);
       postUrl += "/multi";
     }
-    if (experian.name && equifax.name && !transUnion.name) {
-      formData.append("Experian", experian);
-      formData.append("Equifax", equifax);
+    if (experianReport.name && equifaxReport.name && !transUnionReport.name) {
+      formData.append("Experian", experianReport);
+      formData.append("Equifax", equifaxReport);
       postUrl += "/multi";
     }
-    if (transUnion.name && equifax.name && !experian.name) {
-      formData.append("TransUnion", transUnion);
-      formData.append("Equifax", equifax);
+    if (transUnionReport.name && equifaxReport.name && !experianReport.name) {
+      formData.append("TransUnion", transUnionReport);
+      formData.append("Equifax", equifaxReport);
       postUrl += "/multi";
     }
-    if (experian.name && transUnion.name && equifax.name) {
-      formData.append("Experian", experian);
-      formData.append("TransUnion", transUnion);
-      formData.append("Equifax", equifax);
+    if (experianReport.name && transUnionReport.name && equifaxReport.name) {
+      formData.append("Experian", experianReport);
+      formData.append("TransUnion", transUnionReport);
+      formData.append("Equifax", equifaxReport);
     }
-
-    setShowModal(false);
-    setShowForm(false);
 
     const results = await axios.post(postUrl, formData, config);
 
@@ -101,53 +97,47 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
       client.equifax = formatData(equifax, "Equifax");
       source.equifax = info;
     }
+
+    const sourceArray = determinePDFSource(source);
+
+    if (sourceArray.includes(false)) {
+      dispatch(setSource(sourceArray));
+      setIsLoading(false);
+      return navigate("/error");
+    }
+
     const bureau = Object.keys(client)[0];
 
     dispatch(
       setLogistics({
         client: client,
         bureau: client[bureau]["Credit Bureau"],
-        source: source,
+        source: sourceArray,
       })
     );
-
     setIsLoading(false);
+    navigate("/summary");
   };
 
   const handleExperianUpload = (e) => {
-    dispatch(setClient(null));
-    setExperian(e.target.files[0]);
+    setExperianReport(e.target.files[0]);
   };
 
   const handleTransUnionUpload = (e) => {
-    dispatch(setClient(null));
-    setTransUnion(e.target.files[0]);
+    setTransUnionReport(e.target.files[0]);
   };
 
   const handleEquifaxUpload = (e) => {
-    dispatch(setClient(null));
-    setEquifax(e.target.files[0]);
+    setEquifaxReport(e.target.files[0]);
   };
 
   const handleResetClicked = () => {
-    dispatch(reset);
-    setExperian([]);
-    setTransUnion([]);
-    setEquifax([]);
-    setShowForm(false);
-    setShowExperian(false);
-    setShowTransUnion(false);
-    setShowEquifax(false);
+    dispatch(reset());
+    setExperianReport([]);
+    setTransUnionReport([]);
+    setEquifaxReport([]);
+    navigate("/");
   };
-
-  const information = !showForm ? (
-    <Information
-      setShowForm={setShowForm}
-      setShowEquifax={setShowEquifax}
-      setShowExperian={setShowExperian}
-      setShowTransUnion={setShowTransUnion}
-    />
-  ) : null;
 
   const experianInputs = showExperian ? (
     <div className="inputContainer">
@@ -163,7 +153,7 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
 
   const transUnionInputs = showTransUnion ? (
     <div className="inputContainer">
-      <label htmlFor="Transunion">Upload TransUnion File</label>
+      <label htmlFor="TransUnion">Upload TransUnion File</label>
       <input
         id="TransUnion"
         type="file"
@@ -180,44 +170,38 @@ const FileUpload = ({ showModal, setShowModal, setIsLoading, isLoading }) => {
     </div>
   ) : null;
 
-  const form = showForm ? (
-    <form
-      action="/"
-      method="post"
-      encType="multipart/form-data"
-      onSubmit={handleSubmit}
-      className="fileUpload"
-    >
-      <h2>Credit Report Upload Form</h2>
-      <fieldset className="uploads">
-        {experianInputs}
-        {transUnionInputs}
-        {equifaxInputs}
-      </fieldset>
-
-      <div className="buttonContainer">
-        <button className="formButton" onClick={handleSubmit}>
-          Upload
-        </button>
-        <button
-          className="formButton"
-          type="button"
-          onClick={handleResetClicked}
-        >
-          Reset
-        </button>
-      </div>
-    </form>
-  ) : null;
-
-  const modal = showModal ? (
+  const form = (
     <div className="overlay">
-      {information}
-      {form}
+      <form
+        action="/"
+        method="post"
+        encType="multipart/form-data"
+        onSubmit={handleSubmit}
+        className="fileUpload"
+      >
+        <h2>Credit Report Upload Form</h2>
+        <fieldset className="uploads">
+          {experianInputs}
+          {transUnionInputs}
+          {equifaxInputs}
+        </fieldset>
+        <div className="buttonContainer">
+          <button className="formButton" onClick={handleSubmit}>
+            Upload
+          </button>
+          <button
+            className="formButton"
+            type="button"
+            onClick={handleResetClicked}
+          >
+            Reset
+          </button>
+        </div>
+      </form>
     </div>
-  ) : null;
+  );
 
-  const rendered = isLoading ? <PulseLoader color={"#000"} /> : modal;
+  const rendered = isLoading ? <PulseLoader color={"#000"} /> : form;
 
   return rendered;
 };

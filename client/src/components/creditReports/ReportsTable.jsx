@@ -1,16 +1,13 @@
 import { areThereDerogatoryMarks } from "../../util/accountHelpers";
-import {
-  selectCurrentClient,
-  reset,
-  selectCurrentSource,
-} from "../../clientSlice";
+import { selectCurrentClient, reset } from "../../clientSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { analyzeLatePayments, compareLates } from "../../util/universalHelpers";
+import { useNavigate } from "react-router-dom";
 
-const ReportsTable = ({ setShowModal }) => {
+const ReportsTable = () => {
   const client = useSelector(selectCurrentClient);
-  const source = useSelector(selectCurrentSource);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const experian = client?.experian ? client.experian : null;
   const transUnion = client?.transUnion ? client.transUnion : null;
   const equifax = client?.equifax ? client.equifax : null;
@@ -151,8 +148,7 @@ const ReportsTable = ({ setShowModal }) => {
   );
 
   const handleNewReport = () => {
-    dispatch(reset());
-    setShowModal(true);
+    navigate("/");
   };
 
   return (

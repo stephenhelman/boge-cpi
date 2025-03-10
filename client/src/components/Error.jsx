@@ -1,22 +1,23 @@
-import { useDispatch } from "react-redux";
-import { reset } from "../clientSlice";
 import { useSelector } from "react-redux";
 import { selectCurrentSource } from "../clientSlice";
-import { determinePDFSource } from "../util/universalHelpers";
+import { useNavigate } from "react-router-dom";
 
-const Error = ({ setShowModal }) => {
-  const dispatch = useDispatch();
+const Error = () => {
+  const navigate = useNavigate();
   const handleNewReport = () => {
-    dispatch(reset());
-    setShowModal(true);
+    navigate("/");
   };
 
   const source = useSelector(selectCurrentSource);
-  const pdfSource = determinePDFSource(source);
 
-  const experian = pdfSource[0];
-  const transUnion = pdfSource[1];
-  const equifax = pdfSource[2];
+  let experian;
+  let transUnion;
+  let equifax;
+  if (source.length) {
+    experian = source[0];
+    transUnion = source[1];
+    equifax = source[2];
+  }
 
   return (
     <div className="error">

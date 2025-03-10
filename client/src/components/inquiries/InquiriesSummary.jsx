@@ -3,7 +3,9 @@ import InquiriesTable from "./InquiriesTable";
 
 const InquiriesSummary = ({ inquiries }) => {
   const [showTable, setShowTable] = useState(false);
-  const { ninety, oneEighty, other } = inquiries;
+  const ninety = inquiries?.ninety;
+  const oneEighty = inquiries?.oneEighty;
+  const other = inquiries?.other;
 
   const toggleTable = () => {
     setShowTable((prev) => !prev);

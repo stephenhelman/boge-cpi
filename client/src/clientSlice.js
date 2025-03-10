@@ -2,13 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
   name: "client",
-  initialState: { client: null, bureau: null, source: null },
+  initialState: { client: {}, bureau: null, source: [] },
   reducers: {
     setLogistics: (state, action) => {
       const { client, bureau, source } = action.payload;
       state.client = client;
       state.bureau = bureau;
-      state.source = source;
     },
     setClient: (state, action) => {
       state.client = action.payload;
@@ -22,11 +21,13 @@ const authSlice = createSlice({
     reset: (state, action) => {
       state.client = null;
       state.bureau = null;
+      state.source = null;
     },
   },
 });
 
-export const { setLogistics, setClient, setBureau, reset } = authSlice.actions;
+export const { setLogistics, setClient, setBureau, setSource, reset } =
+  authSlice.actions;
 
 export default authSlice.reducer;
 
