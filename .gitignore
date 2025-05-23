@@ -28,3 +28,7 @@ dist-ssr
 
 uploads
 .DS_Store
+
+client/.env
+.env
+client/src/util/cpiSkeleton.js
