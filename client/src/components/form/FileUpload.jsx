@@ -34,7 +34,7 @@ const FileUpload = () => {
 
     const config = { headers: { "Content-Type": "multipart/form-data" } };
     //dev url
-    /* let postUrl = "http://localhost:3500"; */
+    /*    let postUrl = "http://localhost:3500"; */
 
     //production url
     let postUrl = "https://boge-cpi.onrender.com/api";
@@ -79,31 +79,30 @@ const FileUpload = () => {
 
     const client = {};
     const source = {};
-    if (data.experian) {
-      const { experian } = data;
-      const { info } = experian;
-      client.experian = formatData(experian, "Experian");
-      source.experian = info;
-    }
-    if (data.transUnion) {
-      const { transUnion } = data;
-      const { info } = transUnion;
-      client.transUnion = formatData(transUnion, "TransUnion");
-      source.transUnion = info;
-    }
-    if (data.equifax) {
-      const { equifax } = data;
-      const { info } = equifax;
-      client.equifax = formatData(equifax, "Equifax");
-      source.equifax = info;
-    }
+
+    data.experian ? (source.experian = data.experian.info) : null;
+    data.transUnion ? (source.transUnion = data.transUnion.info) : null;
+    data.equifax ? (source.equifax = data.experian.equifax) : null;
 
     const sourceArray = determinePDFSource(source);
-
     if (sourceArray.includes(false)) {
       dispatch(setSource(sourceArray));
       setIsLoading(false);
       return navigate("/error");
+    }
+
+    if (data.experian) {
+      const { experian } = data;
+
+      client.experian = formatData(experian, "Experian");
+    }
+    if (data.transUnion) {
+      const { transUnion } = data;
+      client.transUnion = formatData(transUnion, "TransUnion");
+    }
+    if (data.equifax) {
+      const { equifax } = data;
+      client.equifax = formatData(equifax, "Equifax");
     }
 
     const bureau = Object.keys(client)[0];

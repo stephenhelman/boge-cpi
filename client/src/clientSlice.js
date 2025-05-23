@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
   name: "client",
-  initialState: { client: {}, bureau: null, source: [] },
+  initialState: { client: {}, bureau: null, source: [], token: null },
   reducers: {
     setLogistics: (state, action) => {
-      const { client, bureau, source } = action.payload;
+      const { client, bureau } = action.payload;
       state.client = client;
       state.bureau = bureau;
     },
@@ -18,6 +18,7 @@ const authSlice = createSlice({
     setSource: (state, action) => {
       state.source = action.payload;
     },
+
     reset: (state, action) => {
       state.client = null;
       state.bureau = null;

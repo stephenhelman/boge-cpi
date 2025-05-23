@@ -8,7 +8,6 @@ import {
   lateAccountsGrouping,
 } from "./accountHelpers";
 import { formatRawAccountData } from "./formatAccounts";
-import { fundingReadiness } from "./fundingReadiness";
 
 export const formatData = (data, bureau) => {
   //establish client
@@ -153,8 +152,6 @@ export const formatData = (data, bureau) => {
 
   //add inquiries to client
   parseInquiryNumbers(inquiriesFinal, client);
-
-  /* console.log(client); */
 
   /* fundingReadiness(client); */
 

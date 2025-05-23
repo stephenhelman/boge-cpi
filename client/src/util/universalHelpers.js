@@ -1,9 +1,10 @@
 import { differenceInMonths } from "date-fns";
-
+//capitalize words
 export const capitalize = (val) => {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 };
 
+//parse through the report data and return the specified information as a raw array
 export const parseRawReportData = (bulkDataArray, index, term) => {
   const end = bulkDataArray.indexOf(term, index);
   const dataArray = bulkDataArray.slice(index, end);
@@ -13,6 +14,7 @@ export const parseRawReportData = (bulkDataArray, index, term) => {
   };
 };
 
+//format the utilization
 export const formatUtilization = (balance, limit) => {
   if (limit === "-") {
     return 0;
@@ -27,6 +29,7 @@ export const formatUtilization = (balance, limit) => {
   );
 };
 
+//loop through the raw account array and return a raw account
 export const rawAccountLoop = (accountData, rawArray, numberOfAccounts) => {
   let index = 0;
   for (let i = 1; i <= numberOfAccounts; i++) {
@@ -43,6 +46,7 @@ export const rawAccountLoop = (accountData, rawArray, numberOfAccounts) => {
   }
 };
 
+//format payment history
 export const formatPaymentHistoryObject = (paymentHistoryObj) => {
   const { years, status } = paymentHistoryObj;
   const formattedPaymentHistory = {};
@@ -57,6 +61,7 @@ export const formatPaymentHistoryObject = (paymentHistoryObj) => {
   return formattedPaymentHistory;
 };
 
+//analyze the late payments
 export const analyzeLatePayments = (client) => {
   const experianLates = client?.experian
     ? client.experian["Late Payments"]
@@ -82,6 +87,7 @@ export const analyzeLatePayments = (client) => {
   return lateArray;
 };
 
+//compare late payments to determine which is most recent
 export const compareLates = (lateArray) => {
   const today = Date.now();
 
@@ -98,11 +104,16 @@ export const compareLates = (lateArray) => {
   });
 };
 
+//determine source of PDF download
 const pdfSourceParse = (source) => {
   let pdfSource;
   if (!source) return null;
   const creator = source?.Creator;
   if (!creator) {
+    const producer = source?.Producer.split(" ");
+    if (producer.includes("Quartz")) {
+      return pdfSource;
+    }
     pdfSource = false;
     return pdfSource;
   }
@@ -116,6 +127,7 @@ const pdfSourceParse = (source) => {
   return pdfSource;
 };
 
+//determine if the pdf that was uploaded is formatted correct
 export const determinePDFSource = (source) => {
   const experian = source?.experian ? source.experian : null;
   const transUnion = source?.transUnion ? source.transUnion : null;

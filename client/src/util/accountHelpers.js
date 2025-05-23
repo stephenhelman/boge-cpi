@@ -278,23 +278,26 @@ export const formatInquiries = (inquiryData, finalArray) => {
 };
 
 export const dollarsToNumbers = (value) => {
+  if (!value) {
+    return value.toString();
+  }
   return Number(value.replace(/\D/, "").split(",").join(""));
 };
 
 export const numbersToDollars = (value) => {
   if (!value) {
-    return value;
+    return value.toString();
   }
 
   const valueToReturn = value.toString().split("");
   const length = valueToReturn.length;
   if (length <= 3) {
-    valueToReturn.splice(0, 0, "$");
+    valueToReturn.unshift("$");
     return valueToReturn.join("");
   }
   const commaInsert = length - 3;
   valueToReturn.splice(commaInsert, 0, ",");
-  valueToReturn.splice(0, 0, "$");
+  valueToReturn.unshift("$");
   return valueToReturn.join("");
 };
 
@@ -432,4 +435,26 @@ export const addLatePaymentsToAccount = (paymentHistory) => {
   };
 
   return latePaymentObject;
+};
+
+export const calculatePayDown = (account) => {
+  const balance = dollarsToNumbers(account["Current Balance"]);
+  const limit = dollarsToNumbers(account["Account Limit"]);
+  const utilization = Math.round((balance / limit) * 100);
+  const type = account["Account Type"];
+
+  if (utilization > 30) {
+    if (type.includes("Card") || type.includes("Revolving")) {
+      const thirtyPercent = limit * 0.3;
+      return numbersToDollars(balance - thirtyPercent);
+    }
+  }
+  return "0";
+};
+
+export const calculateThirtyPercent = (account) => {
+  const limit = account["Account Limit"];
+  const numbers = dollarsToNumbers(limit);
+  const thirtyPercent = Math.round(numbers * 0.3);
+  return numbersToDollars(thirtyPercent);
 };

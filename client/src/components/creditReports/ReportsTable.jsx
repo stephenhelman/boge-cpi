@@ -151,6 +151,10 @@ const ReportsTable = () => {
     navigate("/");
   };
 
+  const handleSave = () => {
+    navigate("/save");
+  };
+
   return (
     <div className="reportsContainer">
       <table className="reportsTable">
@@ -166,6 +170,9 @@ const ReportsTable = () => {
       </table>
       <button onClick={handleNewReport} className="newButton">
         New
+      </button>
+      <button onClick={handleSave} className="newButton">
+        Export to Google Docs
       </button>
     </div>
   );
