@@ -10,6 +10,5 @@ export const createCPIRequests = (client, clientName) => {
   const accountsTableRequests = buildRequest(accounts);
   const creditReportData = buildBureauCreditReportObject(client);
   const name = addName(clientName);
-  console.log(creditReportData);
   return [...accountsTableRequests, ...creditReportData, ...name];
 };
